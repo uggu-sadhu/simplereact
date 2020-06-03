@@ -1,14 +1,12 @@
 import React from 'react';
-import './App.css';
-import Imageupload from './Imageupload.js';
-import Gridpanel from './Gridpanel.js';
+import Multiupload from './Multiupload.js';
 
+import './App.css';
 
 function App() {
   return (
     <div className="App">
-    <Gridpanel> </Gridpanel>
-     
+       <Multiupload> </Multiupload>
     </div>
   );
 }

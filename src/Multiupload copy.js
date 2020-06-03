@@ -34,12 +34,17 @@ const Multiupload = (props) => {
 
   const [fileupload, setfileupload] = useState([]);
   const [addchck, setaddchk] = useState(true);
-
+  
   const addemptyfile = () => {
     setaddchk(true);
   }
 
-  const addfile = (fileindx,  event) => {
+  const addfile = (fileindx, ddd, event) => {
+    console.log("1111111111111");
+    console.log("22222222222222");
+
+    console.log(fileindx);
+    console.log(ddd);
     event.preventDefault();
     let reader = new FileReader();
     let file = event.target.files[0];
@@ -64,8 +69,14 @@ const Multiupload = (props) => {
       if ("newfile" != fileindx) {
         // Second Time  reupload
         fileupload.forEach(element => {
+          console.log("outside");
           newfile = element;
+          console.log(element.id);
+          console.log(fileindx)
           if (element.id === fileindx) {
+            console.log("inside");
+            console.log(element.id);
+            console.log(fileindx)
             newfile = {
               file: file,
               imagePreviewUrl: reader.result,
@@ -84,7 +95,10 @@ const Multiupload = (props) => {
       }
 
 
- 
+      fileoverride.forEach(element => {
+        console.log("final");
+        console.log(element.id);
+      });
       // First Time or new File upload
       if (!checkreupload) {
         newfile = {
@@ -101,7 +115,7 @@ const Multiupload = (props) => {
         fileoverride.push(newfile);
       }
 
-      setfileupload([...fileoverride]);
+      setfileupload(fileoverride);
 
     }
     reader.readAsDataURL(file);
@@ -112,74 +126,64 @@ const Multiupload = (props) => {
 
 
 
-  const deletefile = (fileindx) => {
-    const files = [];
-    fileupload.forEach(element => {
-      const newfile = element;
-      if (element.id != fileindx) {
-        files.push(newfile);
-      }
-    });
-
-    setfileupload([...files]);
-    if(files.length===0){
-      setaddchk(true);
-    }
-
+  const deletefile = (fileindex) => {
+    const files = [...fileupload];
+    files.splice(fileindex, 1);
+    setfileupload(files);
   }
 
 
 
   return (
     <React.Fragment>
-      <Grid container item spacing={3}>
+      <Grid container item  spacing={3}>
         {fileupload.map((value) => (
-          <Grid item key={value.id}  >
-            <Paper className={classes.paper} >
-              {value.imagePreviewUrl !== '' &&
-                <img src={value.src} className={classes.image} alt="..." />
-              }
-            </Paper>
-            <input accept="image/*, .doc, .docx,.pdf" onChange={(e) => addfile(value.id,  e)} className={classes.input} id={value.uploadinput} type="file" />
-            <label htmlFor={value.uploadinput}>
-              <IconButton color="primary" aria-label={value.uploadinput} component="span">
-                <PhotoCamera />
-              </IconButton>
-            </label>
+              <Grid item key={value.id}  >
+                  <Paper className={classes.paper} >
+                    {value.imagePreviewUrl !== '' &&
+                      <img src={value.src} className={classes.image} alt="..." />
+                    }
+                  </Paper>
+                  <input accept="image/*, .doc, .docx,.pdf" onChange={(e) => addfile(value.id, value.uploadinput,  e)} className={classes.input} id="{value.uploadinput}" type="file" />
+                  <label htmlFor="{value.uploadinput}">
+                    <IconButton color="primary" aria-label="upload picture" component="span">
+                      <PhotoCamera />
+                    </IconButton>
+                  </label>
 
 
 
-            < IconButton color="primary" aria-label="delete picture" component="span" onClick={(e) => deletefile(value.id,  e)} >
-              <DeleteIcon />
-            </IconButton>
-            {value.chk &&
-              < IconButton color="primary" aria-label="add picture" component="span" onClick={addemptyfile}  >
-                <AddIcon />
-              </IconButton>
-            }
-            {value.id}
+                  < IconButton color="primary" aria-label="delete picture" component="span" >
+                    <DeleteIcon />
+                  </IconButton>
+                  {value.chk &&
+                    < IconButton color="primary" aria-label="add picture" component="span" onClick={addemptyfile}  >
+                      <AddIcon />
+                    </IconButton>
+                  }
+                  {value.id}
+              
+             </Grid>
 
-          </Grid>
-
-
+          
         ))}
-
-
+       
+   
         {addchck &&
 
-          <Grid item >
-            <Paper className={classes.paper} >
-              <div className="previewText">Select File</div>
-            </Paper>
+            <Grid item >
+              <Paper className={classes.paper} >
+                <div className="previewText">Select File</div>
+              </Paper>
 
-            <input accept="image/*,.doc, .docx,.pdf" onChange={(e) => addfile("newfile",  e)} className={classes.input} id="icon-button-file-first" type="file" />
-            <label htmlFor="icon-button-file-first">
-              <IconButton color="primary" aria-label="upload picture" component="span" >
-                <PhotoCamera />
-              </IconButton>
-            </label>
-          </Grid>
-
+              <input accept="image/*,.doc, .docx,.pdf" onChange={(e) => addfile("newfile", "hai", e)} className={classes.input} id="icon-button-file-first" type="file" />
+              <label htmlFor="icon-button-file-first">
+                <IconButton color="primary" aria-label="upload picture" component="span" >
+                  <PhotoCamera />
+                </IconButton>
+              </label>
+            </Grid>
+         
         }
       </Grid>
     </React.Fragment>
